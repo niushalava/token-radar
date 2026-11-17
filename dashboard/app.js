@@ -433,7 +433,7 @@
     var steps = farmSteps(row);
     var peerLine = row.peer_fallback
       ? 'Its category has no live protocol with a market cap on record, so this row uses the global median multiple of ' + DATA.global_multiple.toFixed(2) + 'x across ' + DATA.global_peers + ' live protocols.'
-      : 'Its category, ' + (row.category || 'Other') + ', has ' + row.peer_count + ' live protocols trading at a median ' + row.peer_median.toFixed(2) + 'x TVL; shrunk toward the global median, this row uses ' + row.peer_multiple.toFixed(2) + 'x.';
+      : 'Its category, ' + (row.category || 'Other') + ', has ' + row.peer_count + ' live protocol' + (row.peer_count === 1 ? '' : 's') + ' trading at a median ' + row.peer_median.toFixed(2) + 'x TVL; shrunk toward the global median, this row uses ' + row.peer_multiple.toFixed(2) + 'x.';
     dialog.appendChild(el('div', { class: 'detail-head' },
       el('div', null,
         el('span', { class: 'brand-name', text: 'Rank ' + row.rank + ' of ' + DATA.board_size + (row.watchlist ? ' · watchlist' : ' · early') }),
@@ -495,6 +495,11 @@
 
   readHash();
   render();
+  window.addEventListener('hashchange', function () {
+    state.selected = null;
+    readHash();
+    render();
+  });
   window.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && dialog.open) dialog.close();
   });
